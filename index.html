@@ -69,6 +69,7 @@ body.t4{ --brand:#15803d; --brand-strong:#116532; --brand-tint:#f1faf3; --brand-
 
 /* Dark chrome surfaces (invoice paper stays light by design) */
 body.dark{
+  color-scheme:dark;
   --bg:#0d1014;
   --bg-grad:radial-gradient(1100px 560px at 72% -12%, #16202b 0%, transparent 60%), var(--bg);
   --surface:#151a21;
@@ -79,6 +80,11 @@ body.dark{
   --text:#e8ebf0;
   --text-muted:#9aa3b2;
   --text-faint:#6b7686;
+  --shadow-xs:0 1px 2px rgba(0,0,0,.32);
+  --shadow-sm:0 1px 3px rgba(0,0,0,.36), 0 1px 2px rgba(0,0,0,.28);
+  --shadow-md:0 10px 24px rgba(0,0,0,.28), 0 2px 8px rgba(0,0,0,.24);
+  --shadow-lg:0 18px 44px rgba(0,0,0,.34), 0 8px 18px rgba(0,0,0,.24);
+  --shadow-xl:0 30px 70px rgba(0,0,0,.42), 0 10px 26px rgba(0,0,0,.28);
 }
 body.dark .accent-text{ color:var(--brand-on-dark); }
 
@@ -318,6 +324,7 @@ body.dark .mode-toggle .ico-moon{ display:none; }
 .fg-select:hover{ border-color:var(--border-strong); }
 .fg-select:focus{ border-color:var(--brand); background:var(--surface); box-shadow:var(--ring); }
 .fg-select option{ color:#1b1f27; background:#ffffff; }
+body.dark .fg-select option{ color:var(--text); background:var(--surface); }
 
 /* Product rows in the form */
 .prows{ display:flex; flex-direction:column; gap:var(--sp-3); margin-bottom:var(--sp-3); }
@@ -415,6 +422,7 @@ body.dark .btn-add:hover{ background:var(--surface-3); }
   overflow:hidden;
   border:1px solid var(--border);
 }
+body.dark .preview-panel{ background:var(--surface-2); border-color:var(--border-strong); }
 .plabel{
   display:flex;
   align-items:center;
@@ -441,9 +449,10 @@ body.dark .btn-add:hover{ background:var(--surface-3); }
 
 /* Scroll wrapper so the fixed-width sheet never breaks layout on mobile */
 .sheet-scroll{ overflow-x:auto; }
+body.dark .sheet-scroll{ background:linear-gradient(180deg, var(--surface-2), #0b0f14); }
 
 /* ── INVOICE SHEET (always light "paper") ── */
-#invoice{ padding:var(--sp-12) 56px; color:#1f2430; min-width:660px; }
+#invoice{ padding:var(--sp-12) 56px; color:#1f2430; min-width:660px; background:#ffffff; }
 
 /* Header */
 .inv-hdr{
@@ -625,17 +634,17 @@ body.dark .btn-add:hover{ background:var(--surface-3); }
 }
 </style>
 </head>
-<body class="t1">
+<body class="t1 dark">
 
 <div class="topbar">
   <div class="app-header">
     <h1>Générateur de <span class="accent-text">Factures</span></h1>
     <p>Trabelsi Youssef Gaafour — Vente électroménager</p>
   </div>
-  <button class="mode-toggle" id="mode-toggle" type="button" aria-pressed="false" onclick="toggleDarkMode()">
+  <button class="mode-toggle" id="mode-toggle" type="button" aria-pressed="true" onclick="toggleDarkMode()">
     <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-    <span class="mode-label">Mode sombre</span>
+    <span class="mode-label">Mode clair</span>
   </button>
 </div>
 
