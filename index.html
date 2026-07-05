@@ -92,16 +92,18 @@ body.dark .accent-text{ color:var(--brand-on-dark); }
    BASE
 ════════════════════════════════════════════ */
 *{box-sizing:border-box;margin:0;padding:0;}
-html{-webkit-text-size-adjust:100%;}
+html{width:100%;-webkit-text-size-adjust:100%;}
 body{
   font-family:var(--font-ui);
   background:var(--bg-grad);
   color:var(--text);
+  width:100%;
   min-height:100vh;
   display:flex;
   flex-direction:column;
   align-items:center;
   padding:var(--sp-8) var(--sp-4) var(--sp-12);
+  overflow-x:hidden;
   transition:background-color var(--t), color var(--t);
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
@@ -111,7 +113,7 @@ body{
 /* ── Top bar (header + actions) ── */
 .topbar{
   width:100%;
-  max-width:1220px;
+  max-width:1280px;
   display:flex;
   align-items:flex-end;
   justify-content:space-between;
@@ -162,7 +164,7 @@ body.dark .mode-toggle .ico-moon{ display:none; }
 /* ── Theme switcher ── */
 .theme-bar{
   width:100%;
-  max-width:1220px;
+  max-width:1280px;
   display:flex;
   gap:var(--sp-2);
   align-items:center;
@@ -196,6 +198,7 @@ body.dark .mode-toggle .ico-moon{ display:none; }
   font-size:var(--fs-xs);
   font-weight:600;
   cursor:pointer;
+  min-height:40px;
   transition:background-color var(--t-fast), color var(--t-fast);
 }
 .tbtn .swatch{
@@ -217,9 +220,9 @@ body.dark .mode-toggle .ico-moon{ display:none; }
 ════════════════════════════════════════════ */
 .workspace{
   display:grid;
-  grid-template-columns:360px minmax(0,1fr);
+  grid-template-columns:minmax(320px,380px) minmax(0,1fr);
   gap:var(--sp-6);
-  max-width:1220px;
+  max-width:1280px;
   width:100%;
   align-items:start;
   animation:rise .55s .08s var(--ease) both;
@@ -275,7 +278,7 @@ body.dark .mode-toggle .ico-moon{ display:none; }
 }
 .fg input{
   width:100%;
-  height:42px;
+  min-height:42px;
   background:var(--surface-2);
   border:1px solid var(--border);
   border-radius:var(--r-sm);
@@ -307,7 +310,7 @@ body.dark .mode-toggle .ico-moon{ display:none; }
 }
 .fg-select{
   width:100%;
-  height:42px;
+  min-height:42px;
   background:var(--surface-2);
   border:1px solid var(--border);
   border-radius:var(--r-sm);
@@ -448,7 +451,7 @@ body.dark .preview-panel{ background:var(--surface-2); border-color:var(--border
 }
 
 /* Scroll wrapper so the fixed-width sheet never breaks layout on mobile */
-.sheet-scroll{ overflow-x:auto; }
+.sheet-scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
 body.dark .sheet-scroll{ background:linear-gradient(180deg, var(--surface-2), #0b0f14); }
 
 /* ── INVOICE SHEET (always light "paper") ── */
@@ -605,12 +608,61 @@ body.dark .sheet-scroll{ background:linear-gradient(180deg, var(--surface-2), #0
   .form-panel{ position:static; top:auto; }
   .topbar{ flex-direction:column; align-items:flex-start; }
 }
-@media (max-width:560px){
+@media (max-width:700px){
   body{ padding:var(--sp-5) var(--sp-3) var(--sp-10); }
-  .app-header h1{ font-size:var(--fs-xl); }
-  .r2{ grid-template-columns:1fr; }
+  .topbar{ align-items:stretch; gap:var(--sp-3); margin-bottom:var(--sp-4); }
+  .app-header h1{ font-size:var(--fs-xl); line-height:1.12; }
+  .app-header p{ line-height:1.4; }
+  .mode-toggle{ width:100%; justify-content:center; min-height:44px; }
+  .theme-bar{ margin-bottom:var(--sp-4); }
   .theme-bar .tb-label{ width:100%; padding:var(--sp-1) var(--sp-2) var(--sp-2); }
-  .tbtn{ flex:1; justify-content:center; }
+  .tbtn{ flex:1 1 calc(50% - var(--sp-2)); justify-content:center; min-height:42px; padding:var(--sp-2) var(--sp-3); }
+  .workspace{ gap:var(--sp-4); }
+  .form-panel{ padding:var(--sp-4); border-radius:var(--r-md); }
+  .fg input,.fg-select{ min-height:44px; font-size:16px; }
+  .btn{ min-height:44px; }
+  .preview-panel{ border-radius:var(--r-md); }
+  .plabel{ padding:var(--sp-3) var(--sp-4); }
+  .sheet-scroll{ overflow-x:visible; }
+  #invoice{ width:100%; min-width:0; padding:var(--sp-6) var(--sp-4); }
+  .inv-hdr{ flex-direction:column; gap:var(--sp-4); margin-bottom:var(--sp-5); }
+  .hdr-right{ width:100%; margin-left:0; text-align:left; display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-2); }
+  .shop-name{ font-size:var(--fs-lg); }
+  .shop-contacts{ line-height:1.45; }
+  .meta-date{ line-height:1.45; }
+  .inv-titlebar{ gap:var(--sp-2); margin-bottom:var(--sp-4); }
+  .inv-titlebar span{ font-size:1.15rem; letter-spacing:.08em; }
+  .inv-client{ grid-template-columns:1fr; padding:var(--sp-4); gap:var(--sp-3); }
+  .cfield.wide{ grid-column:auto; }
+  .inv-table{ display:block; }
+  .inv-table colgroup,.inv-table thead{ display:none; }
+  .inv-table tbody{ display:grid; gap:var(--sp-3); }
+  .inv-table tr{ display:grid; grid-template-columns:46px minmax(0,1fr); border:1px solid #ececf0; border-radius:var(--r-sm); overflow:hidden; background:#ffffff; }
+  .inv-table tbody tr:nth-child(even){ background:#ffffff; }
+  .inv-table td{ border-bottom:1px solid #ececf0; padding:var(--sp-3); }
+  .inv-table td:first-child{ grid-row:1 / span 4; display:flex; align-items:center; justify-content:center; background:var(--brand); color:var(--brand-ink); font-weight:700; border-bottom:0; }
+  .inv-table td:nth-child(n+2){ grid-column:2; text-align:left; }
+  .inv-table td:nth-child(n+3){ display:flex; justify-content:space-between; gap:var(--sp-3); text-align:right; }
+  .inv-table td:nth-child(3)::before{ content:'Qté'; font-weight:700; color:#6b7280; }
+  .inv-table td:nth-child(4)::before{ content:'Prix U TTC'; font-weight:700; color:#6b7280; }
+  .inv-table td:nth-child(5)::before{ content:'PT TTC'; font-weight:700; color:#6b7280; }
+  .inv-table td:last-child{ border-bottom:0; }
+  .desig-cell{ padding:var(--sp-3)!important; }
+  .d-row{ display:grid; grid-template-columns:78px minmax(0,1fr); gap:var(--sp-2); align-items:start; }
+  .d-lbl{ min-width:0; }
+  .totbox{ justify-content:stretch; }
+  .totinner{ width:100%; min-width:0; gap:var(--sp-4); padding:var(--sp-4); }
+  .totamt{ font-size:var(--fs-lg); }
+  .words{ padding:var(--sp-4); margin-bottom:var(--sp-6); }
+  .sig-section{ justify-content:center; }
+}
+@media (max-width:560px){
+  .r2{ grid-template-columns:1fr; }
+  .hdr-right{ grid-template-columns:1fr; }
+}
+@media (max-width:380px){
+  .tbtn{ flex-basis:100%; }
+  #invoice{ padding:var(--sp-5) var(--sp-3); }
 }
 
 /* ════════════════════════════════════════════
