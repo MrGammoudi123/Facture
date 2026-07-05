@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Factures — Trabelsi Youssef</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap');
+
+/* ════════════════════════════════════════════
+   DESIGN TOKENS  (everything derives from here)
+════════════════════════════════════════════ */
+:root{
+  /* Spacing — 4px base scale */
+  --sp-1:4px;  --sp-2:8px;  --sp-3:12px; --sp-4:16px; --sp-5:20px;
+  --sp-6:24px; --sp-7:28px; --sp-8:32px; --sp-10:40px; --sp-12:48px; --sp-16:64px;
+
+  /* Radius scale */
+  --r-xs:6px; --r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:20px; --r-pill:999px;
+
+  /* Type scale */
+  --fs-2xs:.72rem; --fs-xs:.78rem; --fs-sm:.86rem; --fs-base:.94rem;
+  --fs-md:1.02rem; --fs-lg:1.2rem; --fs-xl:1.5rem; --fs-2xl:1.9rem;
+
+  /* Fonts */
+  --font-ui:'Hanken Grotesk', system-ui, -apple-system, sans-serif;
+  --font-display:'Fraunces', 'Hanken Grotesk', Georgia, serif;
+
+  /* Soft, layered shadows */
+  --shadow-xs:0 1px 2px rgba(15,23,42,.05);
+  --shadow-sm:0 1px 3px rgba(15,23,42,.06), 0 1px 2px rgba(15,23,42,.04);
+  --shadow-md:0 4px 12px rgba(15,23,42,.06), 0 2px 4px rgba(15,23,42,.04);
+  --shadow-lg:0 14px 34px rgba(15,23,42,.10), 0 4px 10px rgba(15,23,42,.05);
+  --shadow-xl:0 28px 64px rgba(15,23,42,.14), 0 8px 18px rgba(15,23,42,.06);
+  --ring:0 0 0 3px var(--brand-ring);
+
+  /* Motion */
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --t-fast:.14s var(--ease);
+  --t:.2s var(--ease);
+
+  /* Neutral chrome surfaces — light (default) */
+  --bg:#f5f6f8;
+  --bg-grad:radial-gradient(1200px 600px at 70% -10%, #eef1f6 0%, transparent 60%), var(--bg);
+  --surface:#ffffff;
+  --surface-2:#fbfcfd;
+  --surface-3:#f3f5f8;
+  --border:#e7e9ef;
+  --border-strong:#d6dae3;
+  --text:#1b1f27;
+  --text-muted:#5b6470;
+  --text-faint:#8b94a2;
+
+  /* Brand (overridden per theme) — default = Teal */
+  --brand:#0e7490;
+  --brand-strong:#0b6076;
+  --brand-ink:#ffffff;
+  --brand-tint:#f1fbfd;
+  --brand-soft:#cdeef4;
+  --brand-on-dark:#3fcadd;
+  --brand-ring:rgba(14,116,144,.28);
+}
+
+/* Per-theme accent overrides (colour-only — structure is shared) */
+body.t1{ --brand:#0e7490; --brand-strong:#0b6076; --brand-tint:#f1fbfd; --brand-soft:#cdeef4; --brand-on-dark:#3fcadd; --brand-ring:rgba(14,116,144,.28); }
+body.t2{ --brand:#b45309; --brand-strong:#92400e; --brand-tint:#fff8ef; --brand-soft:#f6dcb8; --brand-on-dark:#f0a44e; --brand-ring:rgba(180,83,9,.26); }
+body.t3{ --brand:#4f46e5; --brand-strong:#3f37c9; --brand-tint:#f4f3ff; --brand-soft:#d7d4fb; --brand-on-dark:#9d96f5; --brand-ring:rgba(79,70,229,.26); }
+body.t4{ --brand:#15803d; --brand-strong:#116532; --brand-tint:#f1faf3; --brand-soft:#c6ecd1; --brand-on-dark:#52c97a; --brand-ring:rgba(21,128,61,.26); }
+
+/* Dark chrome surfaces (invoice paper stays light by design) */
+body.dark{
+  --bg:#0d1014;
+  --bg-grad:radial-gradient(1100px 560px at 72% -12%, #16202b 0%, transparent 60%), var(--bg);
+  --surface:#151a21;
+  --surface-2:#11161c;
+  --surface-3:#1c232c;
+  --border:#272f3a;
+  --border-strong:#333d4a;
+  --text:#e8ebf0;
+  --text-muted:#9aa3b2;
+  --text-faint:#6b7686;
+}
+body.dark .accent-text{ color:var(--brand-on-dark); }
+
+/* ════════════════════════════════════════════
+   BASE
+════════════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  font-family:var(--font-ui);
+  background:var(--bg-grad);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:var(--sp-8) var(--sp-4) var(--sp-12);
+  transition:background-color var(--t), color var(--t);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+.accent-text{ color:var(--brand); }
+
+/* ── Top bar (header + actions) ── */
+.topbar{
+  width:100%;
+  max-width:1220px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:var(--sp-4);
+  margin-bottom:var(--sp-6);
+  animation:rise .5s var(--ease) both;
+}
+.app-header h1{
+  font-family:var(--font-display);
+  font-size:var(--fs-2xl);
+  font-weight:600;
+  letter-spacing:-.01em;
+  line-height:1.05;
+  color:var(--text);
+}
+.app-header h1 .accent-text{ font-style:italic; }
+.app-header p{
+  font-size:var(--fs-sm);
+  color:var(--text-muted);
+  margin-top:var(--sp-2);
+  font-weight:500;
+}
+.mode-toggle{
+  display:inline-flex;
+  align-items:center;
+  gap:var(--sp-2);
+  height:42px;
+  padding:0 var(--sp-4);
+  border-radius:var(--r-pill);
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text-muted);
+  font-family:var(--font-ui);
+  font-size:var(--fs-xs);
+  font-weight:600;
+  cursor:pointer;
+  box-shadow:var(--shadow-xs);
+  transition:border-color var(--t), color var(--t), background-color var(--t), box-shadow var(--t);
+  flex-shrink:0;
+}
+.mode-toggle:hover{ color:var(--text); border-color:var(--border-strong); }
+.mode-toggle:focus-visible{ outline:none; box-shadow:var(--ring); border-color:var(--brand); }
+.mode-toggle svg{ width:17px; height:17px; }
+.mode-toggle .ico-sun{ display:none; }
+body.dark .mode-toggle .ico-sun{ display:block; }
+body.dark .mode-toggle .ico-moon{ display:none; }
+
+/* ── Theme switcher ── */
+.theme-bar{
+  width:100%;
+  max-width:1220px;
+  display:flex;
+  gap:var(--sp-2);
+  align-items:center;
+  margin-bottom:var(--sp-6);
+  padding:var(--sp-2);
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  box-shadow:var(--shadow-xs);
+  flex-wrap:wrap;
+  animation:rise .5s .04s var(--ease) both;
+}
+.theme-bar .tb-label{
+  font-size:var(--fs-2xs);
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--text-faint);
+  padding:0 var(--sp-2) 0 var(--sp-3);
+}
+.tbtn{
+  display:inline-flex;
+  align-items:center;
+  gap:var(--sp-2);
+  padding:var(--sp-2) var(--sp-4);
+  border-radius:var(--r-sm);
+  border:1px solid transparent;
+  background:transparent;
+  color:var(--text-muted);
+  font-family:var(--font-ui);
+  font-size:var(--fs-xs);
+  font-weight:600;
+  cursor:pointer;
+  transition:background-color var(--t-fast), color var(--t-fast);
+}
+.tbtn .swatch{
+  width:11px; height:11px; border-radius:var(--r-pill);
+  box-shadow:0 0 0 2px var(--surface), 0 0 0 3px rgba(0,0,0,.06);
+  flex-shrink:0;
+}
+.tbtn.sw1 .swatch{ background:#0e7490; }
+.tbtn.sw2 .swatch{ background:#b45309; }
+.tbtn.sw3 .swatch{ background:#4f46e5; }
+.tbtn.sw4 .swatch{ background:#15803d; }
+.tbtn:hover{ background:var(--surface-3); color:var(--text); }
+.tbtn:focus-visible{ outline:none; box-shadow:var(--ring); }
+.tbtn.active{ background:var(--brand); color:var(--brand-ink); }
+.tbtn.active .swatch{ background:var(--brand-ink); box-shadow:none; }
+
+/* ════════════════════════════════════════════
+   WORKSPACE
+════════════════════════════════════════════ */
+.workspace{
+  display:grid;
+  grid-template-columns:360px minmax(0,1fr);
+  gap:var(--sp-6);
+  max-width:1220px;
+  width:100%;
+  align-items:start;
+  animation:rise .55s .08s var(--ease) both;
+}
+
+/* ── FORM PANEL ── */
+.form-panel{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:var(--sp-5);
+  position:sticky;
+  top:var(--sp-5);
+  box-shadow:var(--shadow-md);
+  transition:background-color var(--t), border-color var(--t);
+}
+.form-panel h2{
+  display:flex;
+  align-items:center;
+  gap:var(--sp-2);
+  font-family:var(--font-ui);
+  font-size:var(--fs-base);
+  font-weight:700;
+  letter-spacing:-.01em;
+  color:var(--text);
+  margin-bottom:var(--sp-4);
+  padding-bottom:var(--sp-4);
+  border-bottom:1px solid var(--border);
+}
+.form-panel h2 svg{ width:18px; height:18px; color:var(--brand); }
+
+.stitle{
+  font-size:var(--fs-2xs);
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--text-faint);
+  margin:var(--sp-5) 0 var(--sp-3);
+  display:flex;
+  align-items:center;
+  gap:var(--sp-3);
+}
+.stitle::after{ content:''; flex:1; height:1px; background:var(--border); }
+
+.fg{ margin-bottom:var(--sp-3); }
+.fg label{
+  display:block;
+  font-size:var(--fs-2xs);
+  font-weight:600;
+  letter-spacing:.02em;
+  color:var(--text-muted);
+  margin-bottom:var(--sp-2);
+}
+.fg input{
+  width:100%;
+  height:42px;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:var(--r-sm);
+  padding:0 var(--sp-3);
+  font-family:var(--font-ui);
+  font-size:var(--fs-sm);
+  font-weight:500;
+  color:var(--text);
+  outline:none;
+  transition:border-color var(--t-fast), box-shadow var(--t-fast), background-color var(--t-fast);
+}
+.fg input::placeholder{ color:var(--text-faint); }
+.fg input:hover{ border-color:var(--border-strong); }
+.fg input:focus{ border-color:var(--brand); background:var(--surface); box-shadow:var(--ring); }
+.fg input[dir="rtl"]{ text-align:right; }
+.r2{ display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-3); }
+
+/* Product-type dropdown */
+.select-wrap{ position:relative; }
+.select-wrap::after{
+  content:'';
+  position:absolute; right:14px; top:50%;
+  transform:translateY(-30%);
+  width:0; height:0;
+  border-left:4px solid transparent;
+  border-right:4px solid transparent;
+  border-top:5px solid var(--text-faint);
+  pointer-events:none;
+}
+.fg-select{
+  width:100%;
+  height:42px;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:var(--r-sm);
+  padding:0 36px 0 var(--sp-3);
+  font-family:var(--font-ui);
+  font-size:var(--fs-sm);
+  font-weight:600;
+  color:var(--text);
+  cursor:pointer;
+  outline:none;
+  appearance:none; -webkit-appearance:none; -moz-appearance:none;
+  transition:border-color var(--t-fast), box-shadow var(--t-fast), background-color var(--t-fast);
+}
+.fg-select:hover{ border-color:var(--border-strong); }
+.fg-select:focus{ border-color:var(--brand); background:var(--surface); box-shadow:var(--ring); }
+.fg-select option{ color:#1b1f27; background:#ffffff; }
+
+/* Product rows in the form */
+.prows{ display:flex; flex-direction:column; gap:var(--sp-3); margin-bottom:var(--sp-3); }
+.prow-form{
+  background:var(--brand-tint);
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  padding:var(--sp-3);
+  position:relative;
+  animation:rise .3s var(--ease) both;
+}
+body.dark .prow-form{ background:var(--surface-3); }
+.prow-form .pnum{
+  font-size:var(--fs-2xs);
+  font-weight:700;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--brand);
+  margin-bottom:var(--sp-3);
+}
+body.dark .prow-form .pnum{ color:var(--brand-on-dark); }
+.delbtn{
+  position:absolute;
+  top:var(--sp-2);
+  right:var(--sp-2);
+  width:30px; height:30px;
+  display:flex; align-items:center; justify-content:center;
+  background:transparent;
+  border:1px solid transparent;
+  color:var(--text-faint);
+  border-radius:var(--r-sm);
+  cursor:pointer;
+  transition:background-color var(--t-fast), color var(--t-fast);
+}
+.delbtn svg{ width:15px; height:15px; }
+.delbtn:hover{ background:#fee2e2; color:#dc2626; }
+body.dark .delbtn:hover{ background:rgba(220,38,38,.16); color:#f87171; }
+.delbtn:focus-visible{ outline:none; box-shadow:0 0 0 3px rgba(220,38,38,.25); }
+
+/* Buttons */
+.btn{
+  width:100%;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:var(--sp-2);
+  border-radius:var(--r-sm);
+  font-family:var(--font-ui);
+  font-size:var(--fs-sm);
+  font-weight:600;
+  cursor:pointer;
+  transition:transform var(--t-fast), box-shadow var(--t-fast), background-color var(--t-fast), border-color var(--t-fast), color var(--t-fast);
+}
+.btn svg{ width:16px; height:16px; }
+.btn:focus-visible{ outline:none; box-shadow:var(--ring); }
+
+.btn-add{
+  height:42px;
+  background:transparent;
+  border:1px dashed var(--border-strong);
+  color:var(--brand);
+  margin-bottom:var(--sp-4);
+}
+body.dark .btn-add{ color:var(--brand-on-dark); }
+.btn-add:hover{ background:var(--brand-tint); border-color:var(--brand); }
+body.dark .btn-add:hover{ background:var(--surface-3); }
+
+.btn-p{
+  height:46px;
+  background:var(--brand);
+  color:var(--brand-ink);
+  border:none;
+  letter-spacing:.01em;
+  margin-bottom:var(--sp-2);
+  box-shadow:var(--shadow-sm);
+}
+.btn-p:hover{ background:var(--brand-strong); transform:translateY(-1px); box-shadow:var(--shadow-md); }
+.btn-p:active{ transform:translateY(0); box-shadow:var(--shadow-xs); }
+
+.btn-s{
+  height:42px;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  color:var(--text-muted);
+}
+.btn-s:hover{ background:var(--surface-3); color:var(--text); border-color:var(--border-strong); }
+
+/* ════════════════════════════════════════════
+   PREVIEW PANEL
+════════════════════════════════════════════ */
+.preview-panel{
+  background:#ffffff;
+  border-radius:var(--r-lg);
+  box-shadow:var(--shadow-xl);
+  overflow:hidden;
+  border:1px solid var(--border);
+}
+.plabel{
+  display:flex;
+  align-items:center;
+  gap:var(--sp-2);
+  padding:var(--sp-3) var(--sp-5);
+  font-size:var(--fs-2xs);
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--brand-ink);
+  background:var(--brand-strong);
+}
+.live-dot{
+  width:8px; height:8px; border-radius:var(--r-pill);
+  background:#4ade80;
+  box-shadow:0 0 0 0 rgba(74,222,128,.6);
+  animation:pulse 2.2s infinite;
+}
+@keyframes pulse{
+  0%{ box-shadow:0 0 0 0 rgba(74,222,128,.5); }
+  70%{ box-shadow:0 0 0 6px rgba(74,222,128,0); }
+  100%{ box-shadow:0 0 0 0 rgba(74,222,128,0); }
+}
+
+/* Scroll wrapper so the fixed-width sheet never breaks layout on mobile */
+.sheet-scroll{ overflow-x:auto; }
+
+/* ── INVOICE SHEET (always light "paper") ── */
+#invoice{ padding:var(--sp-12) 56px; color:#1f2430; min-width:660px; }
+
+/* Header */
+.inv-hdr{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  padding-bottom:var(--sp-5);
+  border-bottom:1px solid #e8eaee;
+  margin-bottom:var(--sp-7);
+  position:relative;
+}
+.inv-hdr::after{ content:''; position:absolute; left:0; bottom:-1px; width:64px; height:3px; background:var(--brand); border-radius:var(--r-pill); }
+.hdr-left{ flex:1; }
+.hdr-right{ text-align:right; flex-shrink:0; margin-left:var(--sp-6); }
+.shop-name{
+  font-family:var(--font-display);
+  font-size:var(--fs-xl);
+  font-weight:600;
+  line-height:1.1;
+  letter-spacing:-.01em;
+  color:var(--brand);
+}
+.shop-sub{ font-size:var(--fs-sm); font-weight:500; color:#6b7280; margin-top:var(--sp-1); }
+.shop-contacts{ margin-top:var(--sp-3); font-size:var(--fs-xs); font-weight:500; color:#6b7280; }
+.meta-date{ font-size:var(--fs-sm); font-weight:500; line-height:1.7; color:#6b7280; }
+.meta-date strong{ font-weight:700; color:var(--brand); font-variant-numeric:tabular-nums; }
+
+/* Title */
+.inv-titlebar{ text-align:center; margin:0 0 var(--sp-6); display:flex; align-items:center; gap:var(--sp-4); }
+.inv-titlebar::before,.inv-titlebar::after{ content:''; flex:1; height:1px; background:#e8eaee; }
+.inv-titlebar span{
+  font-family:var(--font-display);
+  font-size:1.45rem;
+  font-weight:600;
+  letter-spacing:.12em;
+  color:var(--brand);
+  text-transform:uppercase;
+}
+
+/* Client block */
+.inv-client{
+  background:var(--brand-tint);
+  border:1px solid var(--brand-soft);
+  border-radius:var(--r-md);
+  padding:var(--sp-4) var(--sp-5);
+  margin-bottom:var(--sp-6);
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:var(--sp-3) var(--sp-5);
+}
+.cfield .clbl{
+  font-size:var(--fs-2xs);
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--brand);
+  margin-bottom:var(--sp-1);
+}
+.cfield .cval{ font-weight:600; font-size:var(--fs-base); color:#1f2430; }
+.cfield .cval[dir="rtl"]{ font-size:var(--fs-md); }
+.cfield .cval.cval-serie{ font-weight:600; word-break:break-all; font-variant-numeric:tabular-nums; }
+.cfield.wide{ grid-column:span 3; }
+
+/* Table — colored header, hairline rows, no internal gridlines */
+.inv-table{ width:100%; border-collapse:collapse; margin-bottom:var(--sp-5); table-layout:fixed; }
+.inv-table col.c-n {width:6%;}
+.inv-table col.c-d {width:48%;}
+.inv-table col.c-q {width:10%;}
+.inv-table col.c-pu{width:18%;}
+.inv-table col.c-pt{width:18%;}
+.inv-table thead tr{ background:var(--brand); }
+.inv-table th{
+  padding:var(--sp-3) var(--sp-3);
+  font-size:var(--fs-2xs);
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  text-align:center;
+  white-space:nowrap;
+  color:var(--brand-ink);
+}
+.inv-table th:first-child{ border-radius:var(--r-sm) 0 0 0; }
+.inv-table th:last-child{ border-radius:0 var(--r-sm) 0 0; }
+.inv-table th.tl{ text-align:left; }
+.inv-table td{
+  padding:var(--sp-3) var(--sp-3);
+  text-align:center;
+  vertical-align:middle;
+  font-weight:500;
+  font-size:var(--fs-sm);
+  word-break:break-word;
+  border-bottom:1px solid #ececf0;
+  color:#2a2f3a;
+}
+.inv-table tbody tr:nth-child(even){ background:#fafbfc; }
+.inv-table td.tl{ text-align:left; }
+.inv-table td.price,.inv-table td.ptotal{ font-variant-numeric:tabular-nums; }
+.inv-table td.price{ font-weight:600; }
+.inv-table td.ptotal{ font-weight:700; color:var(--brand-strong); }
+
+/* Désignation cell */
+.desig-cell{ text-align:left; vertical-align:top!important; padding:var(--sp-3) var(--sp-4)!important; }
+.d-main{ font-weight:700; font-size:var(--fs-base); margin-bottom:var(--sp-2); color:#1f2430; letter-spacing:-.01em; }
+.d-row{ font-size:var(--fs-xs); font-weight:500; line-height:1.65; display:flex; align-items:baseline; gap:var(--sp-2); color:#4b5563; }
+.d-lbl{ font-size:var(--fs-2xs); font-weight:600; text-transform:uppercase; letter-spacing:.04em; color:var(--text-faint); min-width:84px; }
+.d-val{ font-weight:600; color:#374151; }
+.d-serie-val{ word-break:break-all; font-variant-numeric:tabular-nums; }
+
+/* Totals */
+.totbox{ display:flex; justify-content:flex-end; margin-bottom:var(--sp-5); }
+.totinner{
+  background:var(--brand);
+  color:var(--brand-ink);
+  padding:var(--sp-4) var(--sp-7);
+  border-radius:var(--r-md);
+  display:flex; gap:var(--sp-8); align-items:center;
+  min-width:300px;
+  box-shadow:var(--shadow-sm);
+}
+.totlbl{ font-size:var(--fs-2xs); font-weight:600; letter-spacing:.1em; text-transform:uppercase; opacity:.8; }
+.totamt{ font-size:1.4rem; font-weight:700; margin-left:auto; font-variant-numeric:tabular-nums; letter-spacing:-.01em; }
+
+/* Amount in words */
+.words{
+  border:1px solid var(--brand-soft);
+  background:var(--brand-tint);
+  border-radius:var(--r-md);
+  padding:var(--sp-4) var(--sp-5);
+  margin-bottom:var(--sp-8);
+}
+.wlbl{ font-size:var(--fs-2xs); font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--brand); margin-bottom:var(--sp-1); }
+.wtxt{ font-size:var(--fs-sm); font-weight:500; font-style:italic; color:#374151; }
+
+/* Signature */
+.sig-section{ display:flex; justify-content:flex-end; padding-top:var(--sp-5); border-top:1px dashed #d7dae0; }
+.inv-signature{ text-align:center; }
+.sig-lbl{ font-size:var(--fs-xs); font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:#6b7280; margin-bottom:56px; }
+.sig-line{ width:190px; border-top:1.5px solid var(--brand); margin:0 auto; }
+
+/* ════════════════════════════════════════════
+   ANIMATIONS
+════════════════════════════════════════════ */
+@keyframes rise{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
+
+/* ════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════ */
+@media (max-width:920px){
+  .workspace{ grid-template-columns:1fr; }
+  .form-panel{ position:static; top:auto; }
+  .topbar{ flex-direction:column; align-items:flex-start; }
+}
+@media (max-width:560px){
+  body{ padding:var(--sp-5) var(--sp-3) var(--sp-10); }
+  .app-header h1{ font-size:var(--fs-xl); }
+  .r2{ grid-template-columns:1fr; }
+  .theme-bar .tb-label{ width:100%; padding:var(--sp-1) var(--sp-2) var(--sp-2); }
+  .tbtn{ flex:1; justify-content:center; }
+}
+
+/* ════════════════════════════════════════════
+   REDUCED MOTION
+════════════════════════════════════════════ */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; }
+}
+
+/* ════════════════════════════════════════════
+   PRINT  (tokens print correctly with color-adjust)
+════════════════════════════════════════════ */
+@media print{
+  *{ -webkit-print-color-adjust:exact!important; print-color-adjust:exact!important; }
+  html,body{ background:#fff!important; padding:0!important; margin:0!important; }
+  .topbar,.theme-bar,.form-panel,.plabel{ display:none!important; }
+  .workspace{ display:block!important; max-width:none!important; width:100%!important; }
+  .preview-panel{ box-shadow:none!important; border-radius:0!important; border:none!important; }
+  .sheet-scroll{ overflow:visible!important; }
+  #invoice{ padding:18px 26px!important; min-width:0!important; }
+}
+</style>
+</head>
+<body class="t1">
+
+<div class="topbar">
+  <div class="app-header">
+    <h1>Générateur de <span class="accent-text">Factures</span></h1>
+    <p>Trabelsi Youssef Gaafour — Vente électroménager</p>
+  </div>
+  <button class="mode-toggle" id="mode-toggle" type="button" aria-pressed="false" onclick="toggleDarkMode()">
+    <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+    <span class="mode-label">Mode sombre</span>
+  </button>
+</div>
+
+<div class="theme-bar">
+  <span class="tb-label">Thème</span>
+  <button class="tbtn sw1 active" type="button" onclick="setTheme('t1',this)"><span class="swatch"></span>Teal Prestige</button>
+  <button class="tbtn sw2" type="button" onclick="setTheme('t2',this)"><span class="swatch"></span>Amber Warmth</button>
+  <button class="tbtn sw3" type="button" onclick="setTheme('t3',this)"><span class="swatch"></span>Indigo Royal</button>
+  <button class="tbtn sw4" type="button" onclick="setTheme('t4',this)"><span class="swatch"></span>Forest Dark</button>
+</div>
+
+<div class="workspace">
+  <form class="form-panel" onsubmit="return false">
+    <h2>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Saisir les données
+    </h2>
+
+    <div class="stitle">Date &amp; Numéro</div>
+    <div class="r2">
+      <div class="fg"><label for="f-date">Date</label><input type="date" id="f-date"></div>
+      <div class="fg"><label for="f-num">N° Facture</label><input type="text" id="f-num" placeholder="001"></div>
+    </div>
+
+    <div class="stitle">Client</div>
+    <div class="fg"><label for="f-client">Nom (FR / عربي)</label><input type="text" id="f-client" dir="auto" placeholder="Nom / الاسم" value=""></div>
+    <div class="r2">
+      <div class="fg"><label for="f-cin">CIN</label><input type="text" id="f-cin" placeholder="123456789" value=""></div>
+      <div class="fg"><label for="f-tel">Téléphone</label><input type="text" id="f-tel" placeholder="123456789" value=""></div>
+    </div>
+    <div class="r2">
+      <div class="fg"><label for="f-loc">Localisation</label><input type="text" id="f-loc" placeholder="Adresse" value=""></div>
+      <div class="fg"><label for="f-dir">Direction</label><input type="text" id="f-dir" placeholder="Direction" value=""></div>
+    </div>
+    <div class="fg"><label for="f-car">Voiture de livraison — N° série</label><input type="text" id="f-car" placeholder="Matricule / châssis du véhicule" value=""></div>
+
+    <div class="stitle">Produits</div>
+    <div class="prows" id="prows"></div>
+    <button class="btn btn-add" type="button" onclick="addRow()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+      Ajouter un produit
+    </button>
+
+    <button class="btn btn-p" id="btn-gen" type="button" onclick="window.print()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>
+      Imprimer / PDF
+    </button>
+    <button class="btn btn-s" type="button" onclick="updateInvoice()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      Actualiser l'aperçu
+    </button>
+  </form>
+
+  <div class="preview-panel">
+    <div class="plabel"><span class="live-dot" aria-hidden="true"></span>Aperçu en direct</div>
+    <div class="sheet-scroll">
+      <div id="invoice">
+        <div class="inv-hdr">
+          <div class="hdr-left">
+            <div class="shop-name">Trabelsi Youssef Gaafour</div>
+            <div class="shop-sub">Vente électroménager Gaafour</div>
+            <div class="shop-contacts">MF : 2/301462C &nbsp;|&nbsp; FAX : 78 817 332 &nbsp;|&nbsp; TLF : 97 425 340</div>
+          </div>
+          <div class="hdr-right">
+            <div class="meta-date">Date : <strong id="disp-date">—</strong></div>
+            <div class="meta-date">Facture N° : <strong id="disp-num">—</strong></div>
+          </div>
+        </div>
+
+        <div id="inv-title-slot"></div>
+        <div class="inv-client" id="inv-client-wrap"></div>
+
+        <table class="inv-table">
+          <colgroup><col class="c-n"><col class="c-d"><col class="c-q"><col class="c-pu"><col class="c-pt"></colgroup>
+          <thead>
+            <tr>
+              <th>N°</th>
+              <th class="tl">Désignation Des Travaux</th>
+              <th>Qté</th>
+              <th>Prix U TTC</th>
+              <th>PT TTC</th>
+            </tr>
+          </thead>
+          <tbody id="inv-tbody"></tbody>
+        </table>
+
+        <div class="totbox"><div class="totinner"><span class="totlbl">Total TTC</span><span class="totamt" id="disp-total">—</span></div></div>
+        <div class="words"><div class="wlbl">Arrêté la présente facture à la somme de :</div><div class="wtxt" id="disp-lettres">—</div></div>
+        <div class="sig-section"><div class="inv-signature"><div class="sig-lbl">Signature &amp; Cachet</div><div class="sig-line"></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── French words ── */
+const U=['','UN','DEUX','TROIS','QUATRE','CINQ','SIX','SEPT','HUIT','NEUF','DIX','ONZE','DOUZE','TREIZE','QUATORZE','QUINZE','SEIZE','DIX-SEPT','DIX-HUIT','DIX-NEUF'];
+const TN=['','','VINGT','TRENTE','QUARANTE','CINQUANTE','SOIXANTE','SOIXANTE','QUATRE-VINGT','QUATRE-VINGT'];
+function tW(n){if(n<20)return U[n];const t=Math.floor(n/10),u=n%10;if(t===7)return u?'SOIXANTE-'+U[10+u]:'SOIXANTE-DIX';if(t===9)return u?'QUATRE-VINGT-'+U[10+u]:'QUATRE-VINGT-DIX';return TN[t]+(u===1&&t!==8?'-ET-UN':u?'-'+U[u]:(t===8?'S':''));}
+function hW(n){if(!n)return'';if(n<100)return tW(n);const h=Math.floor(n/100),r=n%100,p=h===1?'CENT':U[h]+' CENT'+(r===0&&h>1?'S':'');return r?p+' '+tW(r):p;}
+function n2w(n){if(!n||n<=0)return'';n=Math.round(n*1000)/1000;const i=Math.floor(n),m=Math.round((n-i)*1000);let w='';const M=Math.floor(i/1e6),K=Math.floor((i%1e6)/1000),R=i%1000;if(M)w+=(M===1?'UN MILLION':hW(M)+' MILLIONS')+' ';if(K)w+=(K===1?'MILLE':hW(K)+' MILLE')+' ';if(R)w+=hW(R);w=w.trim()+(i>1?' DINARS':' DINAR');if(m)w+=' ET '+hW(m)+(m>1?' MILLIMES':' MILLIME');return w+'.';}
+function fmt(n){return parseFloat(n||0).toLocaleString('fr-TN',{minimumFractionDigits:3,maximumFractionDigits:3});}
+
+/* ── Theme ── */
+const TITLES={t1:'FACTURE',t2:'FACTURE',t3:'FACTURE',t4:'FACTURE'};
+let ct='t1';
+
+/* ── Product categories ──
+   Each type sets the label shown on the invoice, plus the adaptive
+   "spec" field (its label + placeholder) and a designation hint. */
+const CATS={
+  moto:   {label:'Moto',           spec:'Cylindrée',     specPh:'124 CC',      namePh:'Forza FTM'},
+  tv:     {label:'Téléviseur',     spec:'Taille',        specPh:'55 pouces',   namePh:'Smart TV LED'},
+  congel: {label:'Congélateur',    spec:'Capacité',      specPh:'300 L',       namePh:'Congélateur armoire'},
+  frigo:  {label:'Réfrigérateur',  spec:'Capacité',      specPh:'350 L',       namePh:'Réfrigérateur No Frost'},
+  lavage: {label:'Machine à laver',spec:'Capacité',      specPh:'8 kg',        namePh:'Lave-linge frontal'},
+  clim:   {label:'Climatiseur',    spec:'Puissance',     specPh:'12000 BTU',   namePh:'Climatiseur inverter'},
+  cuisin: {label:'Cuisinière',     spec:'Foyers',        specPh:'4 feux',      namePh:'Cuisinière à gaz'},
+  salon:  {label:'Salon',          spec:'Composition',   specPh:'3+2+1',       namePh:'Salon en cuir'},
+  autre:  {label:'Autre',          spec:'Spécification', specPh:'—',           namePh:'Désignation du produit'}
+};
+const CAT_ORDER=['moto','tv','congel','frigo','lavage','clim','cuisin','salon','autre'];
+function setTheme(t,btn){
+  // Preserve dark mode when switching themes
+  const isDark = document.body.classList.contains('dark');
+  document.body.className = t + (isDark ? ' dark' : '');
+  ct = t;
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  updateInvoice();
+}
+
+// Toggle dark/light mode for the app chrome (the invoice sheet stays light by design).
+function toggleDarkMode(){
+  const isDark = document.body.classList.toggle('dark');
+  const b = document.getElementById('mode-toggle');
+  if(b){
+    b.setAttribute('aria-pressed', String(isDark));
+    const lbl = b.querySelector('.mode-label');
+    if(lbl) lbl.textContent = isDark ? 'Mode clair' : 'Mode sombre';
+  }
+}
+
+/* ── Rows ── */
+let rc=0;
+function addRow(d={}){
+  rc++;const id=rc;
+  const t0=d.type||'moto';
+  const c0=CATS[t0]||CATS.autre;
+  const opts=CAT_ORDER.map(k=>`<option value="${k}"${k===t0?' selected':''}>${CATS[k].label}</option>`).join('');
+  const div=document.createElement('div');
+  div.className='prow-form';div.id='pr-'+id;
+  div.innerHTML=`<div class="pnum">Produit #${id}</div>${id>1?`<button class="delbtn" type="button" aria-label="Supprimer le produit ${id}" onclick="delRow(${id})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>`:''}<div class="fg"><label for="p${id}-type">Type de produit</label><div class="select-wrap"><select class="fg-select" id="p${id}-type" onchange="applyCat(${id})">${opts}</select></div></div><div class="fg"><label for="p${id}-d">Désignation</label><input type="text" id="p${id}-d" placeholder="${c0.namePh}" value="${d.desig||''}"></div><div class="r2"><div class="fg"><label for="p${id}-c">Couleur</label><input type="text" id="p${id}-c" placeholder="NOIR" value="${d.coul||''}"></div><div class="fg"><label id="p${id}-cy-lbl" for="p${id}-cy">${c0.spec}</label><input type="text" id="p${id}-cy" placeholder="${c0.specPh}" value="${d.cyl||''}"></div></div><div class="fg"><label for="p${id}-s">N° de série</label><input type="text" id="p${id}-s" placeholder="N° de série" value="${d.serie||''}"></div><div class="r2"><div class="fg"><label for="p${id}-q">Quantité</label><input type="number" id="p${id}-q" value="${d.qte||1}" min="1"></div><div class="fg"><label for="p${id}-p">Prix U TTC</label><input type="number" id="p${id}-p" placeholder="4250.000" step="0.001" value="${d.prix||''}"></div></div>`;
+  document.getElementById('prows').appendChild(div);
+  div.querySelectorAll('input').forEach(i=>i.addEventListener('input',updateInvoice));
+  updateInvoice();
+}
+// Adapt the spec field (label + placeholder) and designation hint to the chosen category.
+function applyCat(id){
+  const t=document.getElementById('p'+id+'-type')?.value||'moto';
+  const c=CATS[t]||CATS.autre;
+  const lbl=document.getElementById('p'+id+'-cy-lbl');
+  const spec=document.getElementById('p'+id+'-cy');
+  const name=document.getElementById('p'+id+'-d');
+  if(lbl) lbl.textContent=c.spec;
+  if(spec) spec.placeholder=c.specPh;
+  if(name) name.placeholder=c.namePh;
+  updateInvoice();
+}
+function delRow(id){document.getElementById('pr-'+id).remove();updateInvoice();}
+function getProds(){
+  return Array.from(document.querySelectorAll('.prow-form')).map((r,idx)=>{
+    const id=r.id.replace('pr-','');
+    const q=parseFloat(document.getElementById('p'+id+'-q')?.value)||0;
+    const p=parseFloat(document.getElementById('p'+id+'-p')?.value)||0;
+    return{num:idx+1,type:document.getElementById('p'+id+'-type')?.value||'moto',desig:document.getElementById('p'+id+'-d')?.value||'',coul:document.getElementById('p'+id+'-c')?.value||'',cyl:document.getElementById('p'+id+'-cy')?.value||'',serie:document.getElementById('p'+id+'-s')?.value||'',q,p,tot:q*p};
+  });
+}
+
+/* ── Main update ── */
+function updateInvoice(){
+  // Date & num (inline in header — no box)
+  const dr=document.getElementById('f-date').value;
+  let dd='—';if(dr){const[y,m,d]=dr.split('-');dd=`${d}/${m}/${y}`;}
+  document.getElementById('disp-date').textContent=dd;
+  document.getElementById('disp-num').textContent=document.getElementById('f-num').value||'—';
+
+  // Title bar
+  const ts=document.getElementById('inv-title-slot');
+  ts.className='inv-titlebar';
+  ts.innerHTML=`<span>${TITLES[ct]}</span>`;
+
+  // Client
+  const name=document.getElementById('f-client').value||'—';
+  const cin=document.getElementById('f-cin').value||'—';
+  const tel=document.getElementById('f-tel').value||'—';
+  const loc=document.getElementById('f-loc').value||'';
+  const dirr=document.getElementById('f-dir').value||'';
+  const car=document.getElementById('f-car').value||'';
+  const w=document.getElementById('inv-client-wrap');
+  // Build client info dynamically. Optional fields show only when provided.
+  let chtml='';
+  chtml += `<div class="cfield wide"><div class="clbl">Monsieur</div><div class="cval" dir="auto">${name}</div></div>`;
+  chtml += `<div class="cfield"><div class="clbl">CIN</div><div class="cval">${cin}</div></div>`;
+  chtml += `<div class="cfield"><div class="clbl">Téléphone</div><div class="cval">${tel}</div></div>`;
+  if(loc){ chtml += `<div class="cfield"><div class="clbl">Localisation</div><div class="cval">${loc}</div></div>`; }
+  if(dirr){ chtml += `<div class="cfield"><div class="clbl">Direction</div><div class="cval">${dirr}</div></div>`; }
+  if(car){ chtml += `<div class="cfield wide"><div class="clbl">Voiture de livraison — N° série</div><div class="cval cval-serie">${car}</div></div>`; }
+  // Layout is handled by the .inv-client CSS (responsive grid) — no inline override.
+  w.innerHTML=chtml;
+
+  // Table
+  const prods=getProds();
+  const grand=prods.reduce((s,p)=>s+p.tot,0);
+  let html='';
+  prods.forEach(p=>{
+    const cat=CATS[p.type]||CATS.autre;
+    // Only show sub-rows that have content
+    const typeRow  = `<div class="d-row"><span class="d-lbl">Type</span><span class="d-val">${cat.label}</span></div>`;
+    const coulRow  = p.coul  ? `<div class="d-row"><span class="d-lbl">Couleur</span><span class="d-val">${p.coul}</span></div>` : '';
+    const serieRow = p.serie ? `<div class="d-row"><span class="d-lbl">N° de série</span><span class="d-val d-serie-val">${p.serie}</span></div>` : '';
+    const cylRow   = p.cyl   ? `<div class="d-row"><span class="d-lbl">${cat.spec}</span><span class="d-val">${p.cyl}</span></div>` : '';
+    html+=`<tr>
+      <td>${p.num}</td>
+      <td class="desig-cell">
+        <div class="d-main">${p.desig||'—'}</div>
+        ${typeRow}${coulRow}${serieRow}${cylRow}
+      </td>
+      <td>${p.q||'—'}</td>
+      <td class="price">${p.p?fmt(p.p):'—'}</td>
+      <td class="ptotal">${p.tot?fmt(p.tot):'—'}</td>
+    </tr>`;
+  });
+  document.getElementById('inv-tbody').innerHTML=html;
+  document.getElementById('disp-total').textContent=grand?fmt(grand):'—';
+  document.getElementById('disp-lettres').textContent=grand?n2w(grand):'—';
+}
+
+/* ── Init ── */
+document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
+document.querySelectorAll('.form-panel input').forEach(i=>i.addEventListener('input',updateInvoice));
+document.getElementById('btn-gen').addEventListener('click', updateInvoice);
+addRow();
+</script>
+</body>
+</html>
