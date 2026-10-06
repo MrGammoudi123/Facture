@@ -443,7 +443,9 @@ body.dark .btn-add:hover{ background:var(--surface-3); }
 .sheet-scroll{ overflow-x:auto; }
 
 /* ── INVOICE SHEET (always light "paper") ── */
-#invoice{ padding:var(--sp-12) 56px; color:#1f2430; min-width:660px; }
+#invoice,#payment-page{ padding:var(--sp-12) 56px; color:#1f2430; min-width:660px; background:#ffffff; }
+#payment-page{ margin-top:var(--sp-5); }
+.page-divider{ padding:var(--sp-3) var(--sp-5); text-align:center; font-size:var(--fs-2xs); font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint); background:var(--surface-3); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
 
 /* Header */
 .inv-hdr{
@@ -583,6 +585,136 @@ body.dark .btn-add:hover{ background:var(--surface-3); }
 .sig-lbl{ font-size:var(--fs-xs); font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:#6b7280; margin-bottom:56px; }
 .sig-line{ width:190px; border-top:1.5px solid var(--brand); margin:0 auto; }
 
+
+/* ════════════════════════════════════════════
+   MODE DE PAIEMENT — PAGE 2
+════════════════════════════════════════════ */
+.payment-hint{
+  margin-top:-2px;
+  margin-bottom:var(--sp-4);
+  padding:var(--sp-3);
+  border:1px solid var(--brand-soft);
+  border-radius:var(--r-sm);
+  background:var(--brand-tint);
+  color:var(--text-muted);
+  font-size:var(--fs-2xs);
+  font-weight:500;
+  line-height:1.5;
+}
+body.dark .payment-hint{ background:var(--surface-3); color:var(--text-muted); }
+
+.pay-ref{
+  display:grid;
+  grid-template-columns:1.4fr 1fr 1fr;
+  gap:var(--sp-3);
+  margin-bottom:var(--sp-5);
+}
+.pay-ref .pay-ref-item{
+  border:1px solid var(--brand-soft);
+  background:var(--brand-tint);
+  border-radius:var(--r-sm);
+  padding:var(--sp-3) var(--sp-4);
+}
+.pay-ref .pay-ref-label{
+  font-size:var(--fs-2xs);
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--brand);
+  margin-bottom:var(--sp-1);
+}
+.pay-ref .pay-ref-value{
+  font-size:var(--fs-sm);
+  font-weight:700;
+  color:#1f2430;
+  word-break:break-word;
+}
+
+.pay-summary{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:var(--sp-3);
+  margin-bottom:var(--sp-5);
+}
+.pay-card{
+  border:1px solid #e7e9ef;
+  border-radius:var(--r-md);
+  padding:var(--sp-4);
+  background:#fbfcfd;
+}
+.pay-card.accent{ border-color:var(--brand-soft); background:var(--brand-tint); }
+.pay-card-label{
+  font-size:var(--fs-2xs);
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:#7b8492;
+  margin-bottom:var(--sp-2);
+}
+.pay-card.accent .pay-card-label{ color:var(--brand); }
+.pay-card-value{
+  font-size:1.02rem;
+  font-weight:800;
+  color:#1f2430;
+  font-variant-numeric:tabular-nums;
+}
+
+.pay-table{ width:100%; border-collapse:collapse; table-layout:fixed; margin-bottom:var(--sp-5); }
+.pay-table col.p-n{width:7%;}
+.pay-table col.p-m{width:28%;}
+.pay-table col.p-a{width:20%;}
+.pay-table col.p-d{width:22%;}
+.pay-table col.p-s{width:23%;}
+.pay-table thead tr{ background:var(--brand); }
+.pay-table th{
+  padding:10px 8px;
+  color:var(--brand-ink);
+  font-size:var(--fs-2xs);
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  text-align:center;
+}
+.pay-table th:first-child{ border-radius:var(--r-sm) 0 0 0; }
+.pay-table th:last-child{ border-radius:0 var(--r-sm) 0 0; }
+.pay-table td{
+  height:42px;
+  padding:8px 8px;
+  border-bottom:1px solid #ececf0;
+  text-align:center;
+  color:#2a2f3a;
+  font-size:var(--fs-xs);
+  font-weight:600;
+  vertical-align:middle;
+}
+.pay-table tbody tr:nth-child(even){ background:#fafbfc; }
+.pay-table td.pay-month{ text-align:left; text-transform:capitalize; }
+.pay-table td.pay-amount{ font-weight:800; color:var(--brand-strong); font-variant-numeric:tabular-nums; }
+.pay-blank-line{ display:block; width:88%; margin:0 auto; border-bottom:1px dashed #cfd4dc; height:18px; }
+
+.pay-note{
+  margin-top:var(--sp-4);
+  padding:var(--sp-4) var(--sp-5);
+  border:1px dashed #d7dae0;
+  border-radius:var(--r-md);
+  color:#5f6773;
+  font-size:var(--fs-xs);
+  line-height:1.6;
+}
+.pay-note strong{ color:var(--brand-strong); }
+
+.pay-signatures{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:64px;
+  margin-top:var(--sp-8);
+  padding-top:var(--sp-5);
+  border-top:1px dashed #d7dae0;
+}
+.pay-sign-box{ text-align:center; }
+.pay-sign-box .pay-sign-label{ font-size:var(--fs-xs); font-weight:700; text-transform:uppercase; color:#6b7280; margin-bottom:48px; }
+.pay-sign-box .pay-sign-line{ border-top:1.5px solid var(--brand); width:190px; margin:0 auto; }
+
 /* ════════════════════════════════════════════
    ANIMATIONS
 ════════════════════════════════════════════ */
@@ -621,22 +753,21 @@ body.dark .btn-add:hover{ background:var(--surface-3); }
   .workspace{ display:block!important; max-width:none!important; width:100%!important; }
   .preview-panel{ box-shadow:none!important; border-radius:0!important; border:none!important; }
   .sheet-scroll{ overflow:visible!important; }
-  #invoice{ padding:18px 26px!important; min-width:0!important; }
+  #invoice,#payment-page{ padding:18px 26px!important; min-width:0!important; margin:0!important; }
+  #invoice{ break-after:page; page-break-after:always; }
+  #payment-page{ break-before:page; page-break-before:always; }
+  .page-divider{ display:none!important; }
 }
 </style>
 </head>
-<body class="t1">
+<body class="t1 dark">
 
 <div class="topbar">
   <div class="app-header">
     <h1>Générateur de <span class="accent-text">Factures</span></h1>
     <p>Trabelsi Youssef Gaafour — Vente électroménager</p>
   </div>
-  <button class="mode-toggle" id="mode-toggle" type="button" aria-pressed="false" onclick="toggleDarkMode()">
-    <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-    <span class="mode-label">Mode sombre</span>
-  </button>
+
 </div>
 
 <div class="theme-bar">
@@ -679,6 +810,17 @@ body.dark .btn-add:hover{ background:var(--surface-3); }
       Ajouter un produit
     </button>
 
+    <div class="stitle">Mode de paiement</div>
+    <div class="r2">
+      <div class="fg"><label for="f-pay-start">Premier mois</label><input type="month" id="f-pay-start"></div>
+      <div class="fg"><label for="f-pay-months">Nombre de mois</label><input type="number" id="f-pay-months" min="1" max="12" value="12"></div>
+    </div>
+    <div class="r2">
+      <div class="fg"><label for="f-pay-day">Jour d'échéance</label><input type="number" id="f-pay-day" min="1" max="28" value="1"></div>
+      <div class="fg"><label for="f-pay-acompte">Acompte (DT)</label><input type="number" id="f-pay-acompte" min="0" step="0.001" placeholder="0.000" value="0"></div>
+    </div>
+    <div class="payment-hint">Le reste à payer est réparti automatiquement, mois par mois, sur la page 2. Le dernier montant est ajusté au millime pour que le total soit exact.</div>
+
     <button class="btn btn-p" id="btn-gen" type="button" onclick="window.print()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>
       Imprimer / PDF
@@ -701,7 +843,7 @@ body.dark .btn-add:hover{ background:var(--surface-3); }
           </div>
           <div class="hdr-right">
             <div class="meta-date">Date : <strong id="disp-date">—</strong></div>
-            <div class="meta-date"> : <strong id="disp-num"></strong></div>
+            <div class="meta-date">Facture N° : <strong id="disp-num">—</strong></div>
           </div>
         </div>
 
@@ -725,6 +867,47 @@ body.dark .btn-add:hover{ background:var(--surface-3); }
         <div class="totbox"><div class="totinner"><span class="totlbl">Total TTC</span><span class="totamt" id="disp-total">—</span></div></div>
         <div class="words"><div class="wlbl">Arrêté la présente facture à la somme de :</div><div class="wtxt" id="disp-lettres">—</div></div>
         <div class="sig-section"><div class="inv-signature"><div class="sig-lbl">Signature &amp; Cachet</div><div class="sig-line"></div></div></div>
+      </div>
+
+      <div class="page-divider">Page 2 — Mode de paiement</div>
+
+      <div id="payment-page">
+        <div class="inv-hdr">
+          <div class="hdr-left">
+            <div class="shop-name">Trabelsi Youssef Gaafour</div>
+            <div class="shop-sub">Vente électroménager Gaafour</div>
+            <div class="shop-contacts">MF : 2/301462C &nbsp;|&nbsp; FAX : 78 817 332 &nbsp;|&nbsp; TLF : 97 425 340</div>
+          </div>
+          <div class="hdr-right">
+            <div class="meta-date">Date facture : <strong id="pay-disp-date">—</strong></div>
+            <div class="meta-date">Facture N° : <strong id="pay-disp-num">—</strong></div>
+          </div>
+        </div>
+
+        <div class="inv-titlebar"><span>Mode de paiement</span></div>
+
+        <div class="pay-ref">
+          <div class="pay-ref-item"><div class="pay-ref-label">Client</div><div class="pay-ref-value" id="pay-client-name">—</div></div>
+          <div class="pay-ref-item"><div class="pay-ref-label">CIN</div><div class="pay-ref-value" id="pay-client-cin">—</div></div>
+          <div class="pay-ref-item"><div class="pay-ref-label">Téléphone</div><div class="pay-ref-value" id="pay-client-tel">—</div></div>
+        </div>
+
+        <table class="pay-table">
+          <colgroup><col class="p-n"><col class="p-m"><col class="p-a"><col class="p-d"><col class="p-s"></colgroup>
+          <thead>
+            <tr>
+              <th>N°</th>
+              <th>Mois / Échéance</th>
+              <th>Montant (DT)</th>
+              <th>Date de paiement</th>
+              <th>Signature / Cachet</th>
+            </tr>
+          </thead>
+          <tbody id="pay-tbody"></tbody>
+        </table>
+
+        <div class="pay-note"><strong>Modalité :</strong> paiement mensuel. Chaque échéance est payable à la date indiquée dans le tableau. Les cases « Date de paiement » et « Signature / Cachet » sont prévues pour le suivi manuel de chaque règlement.</div>
+
       </div>
     </div>
   </div>
@@ -768,17 +951,6 @@ function setTheme(t,btn){
   updateInvoice();
 }
 
-// Toggle dark/light mode for the app chrome (the invoice sheet stays light by design).
-function toggleDarkMode(){
-  const isDark = document.body.classList.toggle('dark');
-  const b = document.getElementById('mode-toggle');
-  if(b){
-    b.setAttribute('aria-pressed', String(isDark));
-    const lbl = b.querySelector('.mode-label');
-    if(lbl) lbl.textContent = isDark ? 'Mode clair' : 'Mode sombre';
-  }
-}
-
 /* ── Rows ── */
 let rc=0;
 function addRow(d={}){
@@ -815,13 +987,65 @@ function getProds(){
   });
 }
 
+/* ── Payment schedule ── */
+function clampInt(v,min,max,def){
+  const n=parseInt(v,10);
+  if(!Number.isFinite(n)) return def;
+  return Math.max(min,Math.min(max,n));
+}
+function pad2(n){ return String(n).padStart(2,'0'); }
+function updatePaymentPage(grand, client, displayDate, invoiceNum){
+  const startRaw=document.getElementById('f-pay-start')?.value||'';
+  const months=clampInt(document.getElementById('f-pay-months')?.value,1,12,12);
+  const day=clampInt(document.getElementById('f-pay-day')?.value,1,28,1);
+  let acompte=parseFloat(document.getElementById('f-pay-acompte')?.value)||0;
+  acompte=Math.max(0,Math.min(acompte,grand||0));
+  const reste=Math.max((grand||0)-acompte,0);
+
+  document.getElementById('pay-disp-date').textContent=displayDate||'—';
+  document.getElementById('pay-disp-num').textContent=invoiceNum||'—';
+  document.getElementById('pay-client-name').textContent=client.name||'—';
+  document.getElementById('pay-client-cin').textContent=client.cin||'—';
+  document.getElementById('pay-client-tel').textContent=client.tel||'—';
+
+  let sy,sm;
+  if(startRaw && /^\d{4}-\d{2}$/.test(startRaw)){
+    [sy,sm]=startRaw.split('-').map(Number);
+    sm-=1;
+  }else{
+    const d=new Date(); sy=d.getFullYear(); sm=d.getMonth();
+  }
+
+  const totalMillimes=Math.round(reste*1000);
+  const base=Math.floor(totalMillimes/months);
+  let rem=totalMillimes-(base*months);
+  const monthFmt=new Intl.DateTimeFormat('fr-TN',{month:'long',year:'numeric'});
+  let rows='';
+  for(let i=0;i<months;i++){
+    const d=new Date(sy,sm+i,day);
+    const amountMillimes=base+(i<rem?1:0);
+    const amount=amountMillimes/1000;
+    const due=`${pad2(d.getDate())}/${pad2(d.getMonth()+1)}/${d.getFullYear()}`;
+    const monthLabel=monthFmt.format(d);
+    rows+=`<tr>
+      <td>${i+1}</td>
+      <td class="pay-month">${monthLabel}<br><span style="font-size:.7rem;color:#7b8492;font-weight:600">Échéance : ${due}</span></td>
+      <td class="pay-amount">${grand?fmt(amount):'—'}</td>
+      <td><span class="pay-blank-line"></span></td>
+      <td><span class="pay-blank-line"></span></td>
+    </tr>`;
+  }
+  document.getElementById('pay-tbody').innerHTML=rows;
+}
+
 /* ── Main update ── */
 function updateInvoice(){
   // Date & num (inline in header — no box)
   const dr=document.getElementById('f-date').value;
   let dd='—';if(dr){const[y,m,d]=dr.split('-');dd=`${d}/${m}/${y}`;}
   document.getElementById('disp-date').textContent=dd;
-  document.getElementById('disp-num').textContent=document.getElementById('f-num').value||'—';
+  const invoiceNum=document.getElementById('f-num').value||'—';
+  document.getElementById('disp-num').textContent=invoiceNum;
 
   // Title bar
   const ts=document.getElementById('inv-title-slot');
@@ -872,10 +1096,16 @@ function updateInvoice(){
   document.getElementById('inv-tbody').innerHTML=html;
   document.getElementById('disp-total').textContent=grand?fmt(grand):'—';
   document.getElementById('disp-lettres').textContent=grand?n2w(grand):'—';
+
+  // Page 2 — monthly payment schedule
+  updatePaymentPage(grand,{name,cin,tel,loc,dirr},dd,invoiceNum);
 }
 
 /* ── Init ── */
-document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
+const initNow=new Date();
+document.getElementById('f-date').value=initNow.toISOString().split('T')[0];
+document.getElementById('f-pay-start').value=`${initNow.getFullYear()}-${pad2(initNow.getMonth()+1)}`;
+document.getElementById('f-pay-day').value=Math.min(initNow.getDate(),28);
 document.querySelectorAll('.form-panel input').forEach(i=>i.addEventListener('input',updateInvoice));
 document.getElementById('btn-gen').addEventListener('click', updateInvoice);
 addRow();
