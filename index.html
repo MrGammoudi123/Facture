@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="page2-off">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -586,6 +586,65 @@ body.dark .btn-add:hover{ background:var(--surface-3); }
 .sig-line{ width:190px; border-top:1.5px solid var(--brand); margin:0 auto; }
 
 
+/* ── Avances — documented on invoice page 1 ── */
+.advance-rows{ display:flex; flex-direction:column; gap:var(--sp-3); margin-bottom:var(--sp-3); }
+.advance-row-form{
+  background:var(--brand-tint); border:1px solid var(--border);
+  border-radius:var(--r-md); padding:var(--sp-3); position:relative;
+  animation:rise .3s var(--ease) both;
+}
+body.dark .advance-row-form{ background:var(--surface-3); }
+.advance-row-form .advance-form-title{
+  font-size:var(--fs-2xs); font-weight:700; color:var(--brand);
+  letter-spacing:.06em; text-transform:uppercase; margin-bottom:var(--sp-3);
+}
+body.dark .advance-row-form .advance-form-title{ color:var(--brand-on-dark); }
+.advance-row-form .r2{ padding-right:24px; }
+.advance-alert{
+  margin-bottom:var(--sp-4); font-size:var(--fs-xs); font-weight:600;
+  color:#b91c1c; line-height:1.55;
+}
+.advance-alert[hidden],.advance-section[hidden],.pay-advance-banner[hidden]{ display:none!important; }
+.advance-section{
+  border:1px solid #d9e3e7; background:#fff; border-radius:var(--r-md);
+  padding:var(--sp-3) var(--sp-5); margin:0 0 var(--sp-6);
+  break-inside:avoid; page-break-inside:avoid;
+}
+.advance-heading{
+  font-size:var(--fs-2xs); font-weight:800; color:var(--brand-strong);
+  letter-spacing:.09em; padding-bottom:var(--sp-2); margin-bottom:var(--sp-1);
+  border-bottom:1px solid #e8eaee;
+}
+.advance-line{
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:8px;
+  padding:7px 0; font-size:var(--fs-sm); color:#374151;
+  border-bottom:1px solid #f0f1f3;
+}
+.advance-line:last-child{ border-bottom:0; }
+.advance-line .advance-label{ color:var(--brand-strong); font-weight:800; }
+.advance-line .advance-amount{ font-weight:800; font-variant-numeric:tabular-nums; color:#1f2430; }
+.advance-line .advance-date{ color:#374151; font-weight:600; }
+.advance-footer{
+  display:flex; justify-content:space-between; flex-wrap:wrap; align-items:center;
+  gap:var(--sp-2); padding-top:var(--sp-2); margin-top:var(--sp-2);
+  border-top:1px solid #e8eaee; font-size:var(--fs-xs);
+}
+.advance-footer .advance-summary{ font-weight:700; color:#475569; }
+.advance-footer .advance-summary strong{ color:var(--brand-strong); font-variant-numeric:tabular-nums; margin-left:5px; }
+.pay-advance-banner{
+  background:var(--brand-tint); border:1px solid var(--brand-soft);
+  border-radius:var(--r-sm); padding:var(--sp-3) var(--sp-4);
+  margin-bottom:var(--sp-4); display:flex; justify-content:space-between;
+  flex-wrap:wrap; gap:var(--sp-3); color:#1f2430;
+  font-size:var(--fs-xs); font-weight:600;
+}
+.pay-advance-banner strong{ color:var(--brand-strong); font-weight:800; font-variant-numeric:tabular-nums; }
+@media print{
+  .advance-section{ padding:10px 14px!important; margin-bottom:14px!important; }
+  .advance-line{ padding:4px 0!important; }
+  #invoice .words{ margin-bottom:14px!important; }
+}
+
 /* ════════════════════════════════════════════
    MODE DE PAIEMENT — PAGE 2
 ════════════════════════════════════════════ */
@@ -743,6 +802,33 @@ body.dark .payment-hint{ background:var(--surface-3); color:var(--text-muted); }
   *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; }
 }
 
+
+/* Optional page 2: accessible ON / OFF switch */
+.page2-toggle-box{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  background:var(--surface-2);border:1px solid var(--border-strong);
+  border-radius:var(--r-md);padding:14px 12px;margin-bottom:var(--sp-3);
+}
+.page2-toggle-text{display:flex;flex-direction:column;gap:4px;}
+.page2-toggle-text strong{font-size:var(--fs-sm);font-weight:700;color:var(--text);}
+.page2-toggle-text span{font-size:var(--fs-xs);color:var(--text-muted);}
+.page2-toggle-switch{cursor:pointer;position:relative;flex-shrink:0;display:inline-flex;align-items:center;}
+.page2-toggle-switch input{position:absolute;opacity:0;width:1px;height:1px;}
+.page2-toggle-track{
+  display:block;position:relative;width:56px;height:31px;border-radius:999px;
+  background:#a0a7b3;border:1px solid transparent;transition:background-color .18s ease;
+}
+.page2-toggle-thumb{
+  display:block;position:absolute;top:3px;left:3px;width:23px;height:23px;
+  border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.22);
+  transition:transform .18s ease;
+}
+.page2-toggle-switch input:checked + .page2-toggle-track{background:var(--brand);}
+.page2-toggle-switch input:checked + .page2-toggle-track .page2-toggle-thumb{transform:translateX(25px);}
+.page2-toggle-switch input:focus-visible + .page2-toggle-track{outline:3px solid var(--brand-ring);outline-offset:3px;}
+/* Hide both the page and its preview divider when the option is OFF. */
+html.page2-off #payment-page,html.page2-off .page-divider{display:none!important;}
+
 /* ════════════════════════════════════════════
    PRINT  (tokens print correctly with color-adjust)
 ════════════════════════════════════════════ */
@@ -757,6 +843,9 @@ body.dark .payment-hint{ background:var(--surface-3); color:var(--text-muted); }
   #invoice{ break-after:page; page-break-after:always; }
   #payment-page{ break-before:page; page-break-before:always; }
   .page-divider{ display:none!important; }
+  /* Without page 2 there must be no forced second printed sheet. */
+  html.page2-off #invoice{ break-after:auto!important; page-break-after:auto!important; }
+  html.page2-off #payment-page{display:none!important;}
 }
 </style>
 </head>
@@ -810,18 +899,35 @@ body.dark .payment-hint{ background:var(--surface-3); color:var(--text-muted); }
       Ajouter un produit
     </button>
 
-    <div class="stitle">Mode de paiement</div>
-    <div class="r2">
-      <div class="fg"><label for="f-pay-start">Premier mois</label><input type="month" id="f-pay-start"></div>
-      <div class="fg"><label for="f-pay-months">Nombre de mois</label><input type="number" id="f-pay-months" min="1" max="12" value="12"></div>
-    </div>
-    <div class="r2">
-      <div class="fg"><label for="f-pay-day">Jour d'échéance</label><input type="number" id="f-pay-day" min="1" max="28" value="1"></div>
-      <div class="fg"><label for="f-pay-acompte">Acompte (DT)</label><input type="number" id="f-pay-acompte" min="0" step="0.001" placeholder="0.000" value="0"></div>
-    </div>
-    <div class="payment-hint">Le reste à payer est réparti automatiquement, mois par mois, sur la page 2. Le dernier montant est ajusté au millime pour que le total soit exact.</div>
+    <div class="stitle">Avances — page 1</div>
+    <div class="advance-rows" id="advance-rows"></div>
+    <button class="btn btn-add" type="button" onclick="addAdvance()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+      Ajouter une avance
+    </button>
+    <div class="advance-alert" id="advance-alert" role="status" aria-live="polite" hidden></div>
 
-    <button class="btn btn-p" id="btn-gen" type="button" onclick="window.print()">
+    <div class="stitle">Page 2 — Mode de paiement</div>
+    <div class="page2-toggle-box">
+      <div class="page2-toggle-text">
+        <strong>Afficher la 2ème page ?</strong>
+        <span id="page2-toggle-status" aria-live="polite">OFF — Page 2 masquée</span>
+      </div>
+      <label class="page2-toggle-switch" for="f-show-payment" title="Afficher ou masquer la page 2">
+        <input type="checkbox" id="f-show-payment" role="switch" aria-controls="payment-page">
+        <span class="page2-toggle-track" aria-hidden="true"><span class="page2-toggle-thumb"></span></span>
+      </label>
+    </div>
+    <div id="payment-settings">
+      <div class="r2">
+        <div class="fg"><label for="f-pay-start">Premier mois</label><input type="month" id="f-pay-start"></div>
+        <div class="fg"><label for="f-pay-months">Nombre de mois</label><input type="number" id="f-pay-months" min="1" max="12" value="12"></div>
+      </div>
+      <div class="fg"><label for="f-pay-day">Jour d'échéance</label><input type="number" id="f-pay-day" min="1" max="28" value="1"></div>
+      <div class="payment-hint">Les avances saisies ci-dessus sont inscrites sur la page 1 et automatiquement déduites du montant réparti sur la page 2. Format des dates : JJ/MM/AAAA (ex. 15/11/2023).</div>
+    </div>
+
+    <button class="btn btn-p" id="btn-gen" type="button" onclick="printInvoice()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>
       Imprimer / PDF
     </button>
@@ -866,6 +972,14 @@ body.dark .payment-hint{ background:var(--surface-3); color:var(--text-muted); }
 
         <div class="totbox"><div class="totinner"><span class="totlbl">Total TTC</span><span class="totamt" id="disp-total">—</span></div></div>
         <div class="words"><div class="wlbl">Arrêté la présente facture à la somme de :</div><div class="wtxt" id="disp-lettres">—</div></div>
+        <section class="advance-section" id="advance-section" aria-label="Avances reçues" hidden>
+          <div class="advance-heading">AVANCES REÇUES</div>
+          <div id="advance-list"></div>
+          <div class="advance-footer">
+            <span class="advance-summary">TOTAL DES AVANCES : <strong id="disp-advance-total">0,000 DT</strong></span>
+            <span class="advance-summary">RESTE À PAYER : <strong id="disp-advance-rest">0,000 DT</strong></span>
+          </div>
+        </section>
         <div class="sig-section"><div class="inv-signature"><div class="sig-lbl">Signature &amp; Cachet</div><div class="sig-line"></div></div></div>
       </div>
 
@@ -890,6 +1004,11 @@ body.dark .payment-hint{ background:var(--surface-3); color:var(--text-muted); }
           <div class="pay-ref-item"><div class="pay-ref-label">Client</div><div class="pay-ref-value" id="pay-client-name">—</div></div>
           <div class="pay-ref-item"><div class="pay-ref-label">CIN</div><div class="pay-ref-value" id="pay-client-cin">—</div></div>
           <div class="pay-ref-item"><div class="pay-ref-label">Téléphone</div><div class="pay-ref-value" id="pay-client-tel">—</div></div>
+        </div>
+
+        <div class="pay-advance-banner" id="pay-advance-banner" hidden>
+          <span>Avances déjà versées : <strong id="pay-advances-total">0,000 DT</strong></span>
+          <span>Reste à répartir : <strong id="pay-remaining-total">0,000 DT</strong></span>
         </div>
 
         <table class="pay-table">
@@ -921,6 +1040,10 @@ function tW(n){if(n<20)return U[n];const t=Math.floor(n/10),u=n%10;if(t===7)retu
 function hW(n){if(!n)return'';if(n<100)return tW(n);const h=Math.floor(n/100),r=n%100,p=h===1?'CENT':U[h]+' CENT'+(r===0&&h>1?'S':'');return r?p+' '+tW(r):p;}
 function n2w(n){if(!n||n<=0)return'';n=Math.round(n*1000)/1000;const i=Math.floor(n),m=Math.round((n-i)*1000);let w='';const M=Math.floor(i/1e6),K=Math.floor((i%1e6)/1000),R=i%1000;if(M)w+=(M===1?'UN MILLION':hW(M)+' MILLIONS')+' ';if(K)w+=(K===1?'MILLE':hW(K)+' MILLE')+' ';if(R)w+=hW(R);w=w.trim()+(i>1?' DINARS':' DINAR');if(m)w+=' ET '+hW(m)+(m>1?' MILLIMES':' MILLIME');return w+'.';}
 function fmt(n){return parseFloat(n||0).toLocaleString('fr-TN',{minimumFractionDigits:3,maximumFractionDigits:3});}
+
+function escHtml(value){
+  return String(value).replace(/[&<>"']/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
 
 /* ── Theme ── */
 const TITLES={t1:'FACTURE',t2:'FACTURE',t3:'FACTURE',t4:'FACTURE'};
@@ -987,6 +1110,92 @@ function getProds(){
   });
 }
 
+/* ── Advance payments: repeatable amount + date entries ── */
+let advanceRowCount=0;
+function addAdvance(data={}){
+  const id=++advanceRowCount;
+  const row=document.createElement('div');
+  row.className='advance-row-form';
+  row.id='advance-row-'+id;
+  row.innerHTML=`<div class="advance-form-title">Avance n° ${id}</div>
+    <button class="delbtn" type="button" title="Supprimer cette avance" aria-label="Supprimer l'avance ${id}" onclick="delAdvance(${id})">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="r2">
+      <div class="fg"><label for="advance-${id}-amount">Montant (DT)</label><input type="number" id="advance-${id}-amount" min="0.001" step="0.001" inputmode="decimal" placeholder="600" value=""></div>
+      <div class="fg"><label for="advance-${id}-date">Date (JJ/MM/AAAA)</label><input type="text" id="advance-${id}-date" inputmode="numeric" maxlength="10" pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}" title="Saisir la date au format JJ/MM/AAAA (ex. 15/11/2023)" placeholder="JJ/MM/AAAA" autocomplete="off" value=""></div>
+    </div>`;
+  document.getElementById('advance-rows').appendChild(row);
+  if(data.amount!=null) row.querySelector('#advance-'+id+'-amount').value=data.amount;
+  if(data.date) row.querySelector('#advance-'+id+'-date').value=data.date;
+  row.querySelectorAll('input').forEach(el=>el.addEventListener('input',updateInvoice));
+  updateInvoice();
+}
+function delAdvance(id){
+  document.getElementById('advance-row-'+id)?.remove();
+  updateInvoice();
+}
+function parseAdvanceDate(raw){
+  const m=String(raw||'').trim().match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if(!m) return null;
+  const day=Number(m[1]),month=Number(m[2]);
+  const year=Number(m[3]);
+  const d=new Date(year,month-1,day);
+  if(year<1900||year>2199||d.getFullYear()!==year||d.getMonth()!==month-1||d.getDate()!==day) return null;
+  return `${pad2(day)}/${pad2(month)}/${year}`;
+}
+function getAvances(){
+  return Array.from(document.querySelectorAll('.advance-row-form')).map(row=>{
+    const amountEl=row.querySelector('input[type="number"]');
+    const dateEl=row.querySelector('input[type="text"]');
+    const amountRaw=amountEl.value.trim(),dateRaw=dateEl.value.trim();
+    return {amountRaw,dateRaw,amountMillimes:Math.round(Number(amountRaw)*1000),
+      date:parseAdvanceDate(dateRaw),amountEl,dateEl};
+  }).filter(a=>a.amountRaw||a.dateRaw);
+}
+function updateAdvances(grand){
+  const advances=getAvances();
+  const valid=advances.filter(a=>Number.isFinite(a.amountMillimes)&&a.amountMillimes>0);
+  const totalMillimes=valid.reduce((n,a)=>n+a.amountMillimes,0);
+  const grandMillimes=Math.round(grand*1000);
+  const invalid=advances.some(a=>!Number.isFinite(a.amountMillimes)||a.amountMillimes<=0||!a.date);
+  const excessive=totalMillimes>grandMillimes;
+  const alertBox=document.getElementById('advance-alert');
+  alertBox.hidden=!invalid&&!excessive;
+  alertBox.textContent=invalid
+    ? 'Vérifiez chaque avance : indiquez un montant positif et une date valide (ex. 15/11/2023).'
+    : excessive ? 'Attention : le total des avances dépasse le total TTC de la facture.' : '';
+  const section=document.getElementById('advance-section');
+  section.hidden=advances.length===0;
+  document.getElementById('advance-list').innerHTML=advances.map((a,i)=>
+    `<div class="advance-line"><span class="advance-label">AVANCE</span>`+
+    `<span class="advance-amount">${a.amountMillimes>0?fmt(a.amountMillimes/1000)+' DT':'—'}</span>`+
+    `<span>:</span><span class="advance-date">${a.date||'Date à compléter'}</span></div>`
+  ).join('');
+  document.getElementById('disp-advance-total').textContent=fmt(totalMillimes/1000)+' DT';
+  document.getElementById('disp-advance-rest').textContent=fmt(Math.max(0,grandMillimes-totalMillimes)/1000)+' DT';
+  const banner=document.getElementById('pay-advance-banner');
+  banner.hidden=advances.length===0;
+  document.getElementById('pay-advances-total').textContent=fmt(totalMillimes/1000)+' DT';
+  document.getElementById('pay-remaining-total').textContent=fmt(Math.max(0,grandMillimes-totalMillimes)/1000)+' DT';
+  return {advances,totalMillimes,invalid,excessive};
+}
+function printInvoice(){
+  updateInvoice();
+  const advances=getAvances();
+  const products=getProds();
+  const grandMillimes=Math.round(products.reduce((total,p)=>total+p.tot,0)*1000);
+  if(advances.some(a=>!Number.isFinite(a.amountMillimes)||a.amountMillimes<=0||!a.date)){
+    window.alert('Complétez chaque avance avec un montant positif et une date valide (ex. 15/11/2023).');
+    return;
+  }
+  if(advances.reduce((sum,a)=>sum+a.amountMillimes,0)>grandMillimes){
+    window.alert('Le total des avances ne peut pas dépasser le montant de la facture.');
+    return;
+  }
+  window.print();
+}
+
 /* ── Payment schedule ── */
 function clampInt(v,min,max,def){
   const n=parseInt(v,10);
@@ -994,13 +1203,12 @@ function clampInt(v,min,max,def){
   return Math.max(min,Math.min(max,n));
 }
 function pad2(n){ return String(n).padStart(2,'0'); }
-function updatePaymentPage(grand, client, displayDate, invoiceNum){
+function updatePaymentPage(grand, client, displayDate, invoiceNum, advancesMillimes){
   const startRaw=document.getElementById('f-pay-start')?.value||'';
   const months=clampInt(document.getElementById('f-pay-months')?.value,1,12,12);
   const day=clampInt(document.getElementById('f-pay-day')?.value,1,28,1);
-  let acompte=parseFloat(document.getElementById('f-pay-acompte')?.value)||0;
-  acompte=Math.max(0,Math.min(acompte,grand||0));
-  const reste=Math.max((grand||0)-acompte,0);
+  const grandMillimes=Math.round((grand||0)*1000);
+  const resteMillimes=Math.max(grandMillimes-advancesMillimes,0);
 
   document.getElementById('pay-disp-date').textContent=displayDate||'—';
   document.getElementById('pay-disp-num').textContent=invoiceNum||'—';
@@ -1016,7 +1224,7 @@ function updatePaymentPage(grand, client, displayDate, invoiceNum){
     const d=new Date(); sy=d.getFullYear(); sm=d.getMonth();
   }
 
-  const totalMillimes=Math.round(reste*1000);
+  const totalMillimes=resteMillimes;
   const base=Math.floor(totalMillimes/months);
   let rem=totalMillimes-(base*months);
   const monthFmt=new Intl.DateTimeFormat('fr-TN',{month:'long',year:'numeric'});
@@ -1062,12 +1270,12 @@ function updateInvoice(){
   const w=document.getElementById('inv-client-wrap');
   // Build client info dynamically. Optional fields show only when provided.
   let chtml='';
-  chtml += `<div class="cfield wide"><div class="clbl">Monsieur</div><div class="cval" dir="auto">${name}</div></div>`;
-  chtml += `<div class="cfield"><div class="clbl">CIN</div><div class="cval">${cin}</div></div>`;
-  chtml += `<div class="cfield"><div class="clbl">Téléphone</div><div class="cval">${tel}</div></div>`;
-  if(loc){ chtml += `<div class="cfield"><div class="clbl">Localisation</div><div class="cval">${loc}</div></div>`; }
-  if(dirr){ chtml += `<div class="cfield"><div class="clbl">Direction</div><div class="cval">${dirr}</div></div>`; }
-  if(car){ chtml += `<div class="cfield wide"><div class="clbl">Voiture de livraison — N° série</div><div class="cval cval-serie">${car}</div></div>`; }
+  chtml += `<div class="cfield wide"><div class="clbl">Monsieur</div><div class="cval" dir="auto">${escHtml(name)}</div></div>`;
+  chtml += `<div class="cfield"><div class="clbl">CIN</div><div class="cval">${escHtml(cin)}</div></div>`;
+  chtml += `<div class="cfield"><div class="clbl">Téléphone</div><div class="cval">${escHtml(tel)}</div></div>`;
+  if(loc){ chtml += `<div class="cfield"><div class="clbl">Localisation</div><div class="cval">${escHtml(loc)}</div></div>`; }
+  if(dirr){ chtml += `<div class="cfield"><div class="clbl">Direction</div><div class="cval">${escHtml(dirr)}</div></div>`; }
+  if(car){ chtml += `<div class="cfield wide"><div class="clbl">Voiture de livraison — N° série</div><div class="cval cval-serie">${escHtml(car)}</div></div>`; }
   // Layout is handled by the .inv-client CSS (responsive grid) — no inline override.
   w.innerHTML=chtml;
 
@@ -1079,13 +1287,13 @@ function updateInvoice(){
     const cat=CATS[p.type]||CATS.autre;
     // Only show sub-rows that have content
     const typeRow  = `<div class="d-row"><span class="d-lbl">Type</span><span class="d-val">${cat.label}</span></div>`;
-    const coulRow  = p.coul  ? `<div class="d-row"><span class="d-lbl">Couleur</span><span class="d-val">${p.coul}</span></div>` : '';
-    const serieRow = p.serie ? `<div class="d-row"><span class="d-lbl">N° de série</span><span class="d-val d-serie-val">${p.serie}</span></div>` : '';
-    const cylRow   = p.cyl   ? `<div class="d-row"><span class="d-lbl">${cat.spec}</span><span class="d-val">${p.cyl}</span></div>` : '';
+    const coulRow  = p.coul  ? `<div class="d-row"><span class="d-lbl">Couleur</span><span class="d-val">${escHtml(p.coul)}</span></div>` : '';
+    const serieRow = p.serie ? `<div class="d-row"><span class="d-lbl">N° de série</span><span class="d-val d-serie-val">${escHtml(p.serie)}</span></div>` : '';
+    const cylRow   = p.cyl   ? `<div class="d-row"><span class="d-lbl">${cat.spec}</span><span class="d-val">${escHtml(p.cyl)}</span></div>` : '';
     html+=`<tr>
       <td>${p.num}</td>
       <td class="desig-cell">
-        <div class="d-main">${p.desig||'—'}</div>
+        <div class="d-main">${escHtml(p.desig||'—')}</div>
         ${typeRow}${coulRow}${serieRow}${cylRow}
       </td>
       <td>${p.q||'—'}</td>
@@ -1097,8 +1305,18 @@ function updateInvoice(){
   document.getElementById('disp-total').textContent=grand?fmt(grand):'—';
   document.getElementById('disp-lettres').textContent=grand?n2w(grand):'—';
 
-  // Page 2 — monthly payment schedule
-  updatePaymentPage(grand,{name,cin,tel,loc,dirr},dd,invoiceNum);
+  // Page 1 — documented deposits, page 2 — monthly payment schedule after deposits.
+  const advanceState=updateAdvances(grand);
+  updatePaymentPage(grand,{name,cin,tel,loc,dirr},dd,invoiceNum,advanceState.totalMillimes);
+}
+
+/* ── Optional page 2 visibility for preview AND printing ── */
+function togglePaymentPage(){
+  const enabled=document.getElementById('f-show-payment').checked;
+  document.documentElement.classList.toggle('page2-off', !enabled);
+  document.getElementById('payment-settings').hidden=!enabled;
+  document.getElementById('page2-toggle-status').textContent=enabled
+    ? 'ON — Page 2 visible' : 'OFF — Page 2 masquée';
 }
 
 /* ── Init ── */
@@ -1107,8 +1325,12 @@ document.getElementById('f-date').value=initNow.toISOString().split('T')[0];
 document.getElementById('f-pay-start').value=`${initNow.getFullYear()}-${pad2(initNow.getMonth()+1)}`;
 document.getElementById('f-pay-day').value=Math.min(initNow.getDate(),28);
 document.querySelectorAll('.form-panel input').forEach(i=>i.addEventListener('input',updateInvoice));
-document.getElementById('btn-gen').addEventListener('click', updateInvoice);
+// Always open a new invoice with the optional second page turned OFF.
+document.getElementById('f-show-payment').checked=false;
+document.getElementById('f-show-payment').addEventListener('change', togglePaymentPage);
+togglePaymentPage();
 addRow();
+addAdvance();
 </script>
 </body>
 </html>
